@@ -27,7 +27,7 @@ const app = express();
 app.use(bodyParser.json())
 app.use(cors());
 
-app.use(express.static('doctors'))   //to call file direct here ex: http://localhost:5000/watch.jpg
+app.use(express.static('doctors'))   //to call file direct here ex: https://ancient-sea-70147.herokuapp.com/watch.jpg
 app.use(fileUpload({
   useTempFiles: true
 }));
