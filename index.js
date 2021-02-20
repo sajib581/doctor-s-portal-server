@@ -12,7 +12,7 @@ const nodemailer = require('nodemailer')
 cloudinary.config({
   cloud_name: 'dy3odhvvh',
   api_key: process.env.CLOUDINARY_API_KEY ,
-  api_secret: process.env.CLOUDINARY_API_KEY
+  api_secret: process.env.CLOUDINARY_SECRET_KEY
 });
 
 let transporter = nodemailer.createTransport({
@@ -109,13 +109,10 @@ client.connect(err => {
   })
   app.post('/appointmentsByDate', (req, res) => {
     const { date, email, name, uid } = req.body;
-    console.log(uid);
-    console.log(email);
 
     doctorsCollection.find({email})
       .toArray((err, documents) => {
         const filter = { date: date }
-        console.log(documents.length);
         if (documents.length === 0) {
           if (uid) {
             filter.uid = uid;
@@ -146,7 +143,7 @@ client.connect(err => {
       })
   });
 
-  app.post('/addADoctor', (req, res) => { ////
+  app.post('/addADoctor', (req, res) => {
     const file = req.files.file;
     const name = req.body.name;
     const email = req.body.email;
@@ -157,7 +154,6 @@ client.connect(err => {
 
       if (!error) {
         doctorsData.img = result.url;
-
         doctorsCollection.insertOne(doctorsData)
           .then(result => {
             res.send(result.insertedCount > 0)
