@@ -108,21 +108,21 @@ client.connect(err => {
     })
   })
   app.post('/appointmentsByDate', (req, res) => {
-    const { date, email, name } = req.body;
+    const { date, email, name, uid } = req.body;
+    console.log(uid);
+    console.log(email);
 
-    const filterCryteria = {}
-    if (email) {
-      filterCryteria.email = email
-    }
-    else {
-      filterCryteria.name = name
-    }
-
-    doctorsCollection.find(filterCryteria)
+    doctorsCollection.find({email})
       .toArray((err, documents) => {
         const filter = { date: date }
+        console.log(documents.length);
         if (documents.length === 0) {
-          filter.email = email;
+          if (uid) {
+            filter.uid = uid;
+          }
+          else{
+            filter.email = email;
+          }          
         }
         appointmentsCollection.find(filter)
           .toArray((err, documents) => {
