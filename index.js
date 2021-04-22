@@ -18,7 +18,7 @@ cloudinary.config({
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.USER_EMAIL,
+    user: process.env.USER_EMAIL ,
     pass: process.env.USER_PASS
   }
 })
@@ -44,6 +44,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
   const appointmentsCollection = client.db(process.env.DB_NAME).collection("appointments");
   const doctorsCollection = client.db(process.env.DB_NAME).collection("doctors");
+  const reviewCollection = client.db(process.env.DB_NAME).collection("reviews");
+  
 
   app.post('/addAppointments', (req, res) => {
     const appointment = req.body;
@@ -87,12 +89,13 @@ client.connect(err => {
   })
 
   app.post('/sendAnEmail', (req, res) => {
+    console.log("Hitted");
     data = req.body
     let content = `email: ${data.email} \nmessage: ${data.message} `
 
     var mailOptions = {
-      from: data.email,
-      to: process.env.USER_EMAIL   ,  // Change to email address that you want to receive messages on
+      from: data.email ,
+      to:  "mridulkazi03@gmail.com"  ,  // Change to email address that you want to receive messages on
       subject: data.subject,
       text: content
     }
@@ -100,9 +103,8 @@ client.connect(err => {
     transporter.sendMail(mailOptions, (err, data) => {
       if (err) {
         console.log("Error Occured");
-        res.send({success: false})
+        res.send({success: false})  
       } else {
-        console.log("Email Sent");
         res.send({success: true})
       }
     })
@@ -142,6 +144,20 @@ client.connect(err => {
         res.send(documents);
       })
   });
+
+  app.post('/addReview',(req,res)=>{
+    reviewCollection.insertOne(req.body)
+    .then(result => {
+      res.send(result.insertedCount > 0)
+    })
+  })
+
+  app.get("/getAllReviews",(req,res)=>{
+    reviewCollection.find({}).sort({_id:-1})
+    .toArray((err, documents) => {
+      res.send(documents);
+    })
+  })
 
   app.post('/addADoctor', (req, res) => {
     const file = req.files.file;
