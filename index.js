@@ -89,6 +89,7 @@ client.connect(err => {
   })
 
   app.post('/sendAnEmail', (req, res) => {
+    console.log("Email Hitted");
     data = req.body
     let content = `email: ${data.email} \nmessage: ${data.message} `
 
