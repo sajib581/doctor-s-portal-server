@@ -94,7 +94,7 @@ client.connect(err => {
 
     var mailOptions = {  //mridulkazi03@gmail.com
       from: data.email ,
-      to:  "mridulkazi03@gmail.com"  ,  // Change to email address that you want to receive messages on
+      to:  "sajibchdas225@gmail.com"  ,  // Change to email address that you want to receive messages on
       subject: data.subject,
       text: content
     }
