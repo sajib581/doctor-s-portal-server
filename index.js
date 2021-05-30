@@ -89,11 +89,10 @@ client.connect(err => {
   })
 
   app.post('/sendAnEmail', (req, res) => {
-    console.log("Hitted");
     data = req.body
     let content = `email: ${data.email} \nmessage: ${data.message} `
 
-    var mailOptions = {
+    var mailOptions = {  //mridulkazi03@gmail.com
       from: data.email ,
       to:  "mridulkazi03@gmail.com"  ,  // Change to email address that you want to receive messages on
       subject: data.subject,
@@ -102,8 +101,8 @@ client.connect(err => {
 
     transporter.sendMail(mailOptions, (err, data) => {
       if (err) {
-        console.log("Error Occured");
-        res.send({success: false})  
+        console.log("Error Occured", err);
+        res.send({success: false,err})  
       } else {
         res.send({success: true})
       }
